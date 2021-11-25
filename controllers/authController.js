@@ -1,5 +1,5 @@
 const User = require('../models/user')
-
+const userController = require('../controllers/userController')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
@@ -11,19 +11,7 @@ const createToken = (id) => {
 
 
 module.exports.register = async function(req, res) {
-    const user = new User();
-    user.email = req.body.email;
-    user.password = bcrypt.hashSync(req.body.password, 8);
-    user.pseudo = req.body.pseudo;
-    user.save(function(err) {
-        if(err) {
-            console.log(err);
-            res.sendStatus(500)
-            return
-        }
-        res.status(200).send({user : user})
-    });
-    
+    await userController.addUser(req, res)
 }
 
 module.exports.login = async function(req, res) {

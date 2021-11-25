@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const authController = require('../controllers/authController')
 const security = require('../middlewares/security')
+const userController = require('../controllers/userController')
 
 router.get('/', function(req, res) {
     res.json({
@@ -14,5 +15,11 @@ router.route('/register')
     
 router.route('/login')
     .post(authController.login)
+
+router.route('/user')
+    .get(userController.getUser)
+    //.post(userController.)
+    .put(userController.updateUser)
+    .delete(userController.deleteUser)
 
 module.exports = router
