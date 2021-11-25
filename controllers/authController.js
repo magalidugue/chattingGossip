@@ -22,6 +22,7 @@ module.exports.register = async function(req, res) {
 
 module.exports.login = async function(req, res) {
     const queryParam = {email : req.body.email}
+    cobsole.log(queryParam)
     const user = await User.findOne(queryParam).exec();
     // const token = createToken(user._id)
     if(!user) {
