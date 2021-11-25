@@ -2,11 +2,39 @@
   <head>
     <title>Chat app</title>
   </head>
+  <style>
+    #container {
+      width: 700px;
+      margin: 0 auto;
+    }
+    .chat-input {
+      width: 300px;
+      height: 35px;
+      border: solid 1px #444;
+    }
+    .chat-submit {
+      width: 50px;
+      height: 35px;
+      border: solid 1px #444;
+    }
+    .chat-window {
+      height: 300px;
+      width: 400px;
+    }
+    #chatSection {
+      float: left;
+      border: 1px grey solid;
+      border-radius: 10px;
+      padding: 10px;
+    }
+  </style>
   <body>
     <div id="container">
     
       <div id="chatSection">
-        <div class="chat-window"></div>
+        <div class="chat-window">
+
+        </div>
         <form class="chat-form">
           <label class="chat-label">
             Enter a message:
@@ -16,6 +44,7 @@
         </form>
       </div>
     </div>
+   
 
     <script src="socket.io/socket.io.js"></script>
 
@@ -30,6 +59,23 @@
          socket.emit('chat', Input.value)
           Input.value = ''
     })
+    socket.on('chat', message => {
+      console.log('From server: ', message)
+    })
+      const chatWindow = document.querySelector('.chat-window')
+
+      const renderMessage = message => {
+      const div = document.createElement('div')
+      div.classList.add('render-message')
+      div.innerText = message
+      chatWindow.appendChild(div)
+    }
+
+    socket.on('chat', message => {
+      // make sure to modify this
+      renderMessage(message)
+    })
+
     </script>
  
   </body>
