@@ -18,7 +18,7 @@ module.exports.register = async function(req, res) {
 
 module.exports.login = async function(req, res) {
     const queryParam = {email : req.body.email}
-    cobsole.log(queryParam)
+    console.log(req.body)
     const user = await User.findOne(queryParam).exec();
     const token = createToken(user._id)
     if(!user) {
@@ -29,6 +29,9 @@ module.exports.login = async function(req, res) {
         res.status(401).send('incorrect password')
         res.end()
         return
-    } 
-    res.status(200).send({auth: true, user: user, token: token})
+    }
+    res.cookie('token', token, {
+        maxAge: 3600
+    })
+    res.redirect('/chat')
 }

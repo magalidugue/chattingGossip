@@ -3,6 +3,7 @@ const authController = require('../controllers/authController')
 const security = require('../middlewares/security')
 const userController = require('../controllers/userController')
 const { get } = require('mongoose')
+const path = require("path");
 
 router.get('/', function(req, res) {
     res.json({
@@ -13,8 +14,9 @@ router.get('/', function(req, res) {
 })
 
 router.get('/signup', function(req, res) {
-    res.sendFile('/Users/amineamara/Desktop/chattingGossip/views/signupForm.html') 
+    res.sendFile('signupForm.html',{ root: path.join(__dirname, '../views') })
 })
+
 
 router.route('/register')
     .post(authController.register)
@@ -22,7 +24,7 @@ router.route('/register')
 router.route('/login')
     .post(authController.login)
     .get( function(req, res) {
-        res.sendFile('/Users/amineamara/Desktop/chattingGossip/views/loginForm.html') 
+        res.sendFile('loginForm.html', { root: path.join(__dirname, '../views') })
     })
 
 router.route('/user')
@@ -30,5 +32,10 @@ router.route('/user')
     .post(userController.addUser)
     .put(userController.updateUser)
     .delete(userController.deleteUser)
+
+router.route('/chat')
+    .get(function(req, res) {
+        res.sendFile('mainChatPage.html', { root: path.join(__dirname, '../views') })
+    })
 
 module.exports = router
