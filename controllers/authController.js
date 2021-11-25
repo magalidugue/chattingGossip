@@ -13,6 +13,7 @@ const createToken = (id) => {
 
 module.exports.register = async function(req, res) {
     await userController.addUser(req, res)
+    res.redirect('/login')
 }
 
 module.exports.login = async function(req, res) {

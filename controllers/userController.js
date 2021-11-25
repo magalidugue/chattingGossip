@@ -19,7 +19,6 @@ module.exports.addUser = async function(req, res) {
             res.sendStatus(500)
             return
         }
-        res.status(200).send({user : user})
     });
 }
 
