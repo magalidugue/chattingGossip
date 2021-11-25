@@ -2,9 +2,10 @@ const User = require('../models/user')
 const userController = require('../controllers/userController')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const SECRET_KEY = process.env.TOKEN_JWT
 
 const createToken = (id) => {
-    return jwt.sign({id}, "CECIESTUNTOKEN", {
+    return jwt.sign({id}, SECRET_KEY, {
         expiresIn: 3600
     })
 }
