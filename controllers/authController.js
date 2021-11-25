@@ -3,6 +3,12 @@ const User = require('../models/user')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
+const createToken = (id) => {
+    return jwt.sign({id}, "CECIESTUNTOKEN", {
+        expiresIn: 3600
+    })
+}
+
 
 module.exports.register = async function(req, res) {
     const user = new User();
@@ -23,7 +29,7 @@ module.exports.register = async function(req, res) {
 module.exports.login = async function(req, res) {
     const queryParam = {email : req.body.email}
     const user = await User.findOne(queryParam).exec();
-    // const token = createToken(user._id)
+    const token = createToken(user._id)
     if(!user) {
         res.status(404).send('unknown user')
         res.end()
@@ -33,5 +39,5 @@ module.exports.login = async function(req, res) {
         res.end()
         return
     } 
-    res.status(200).send({auth: true, user: user})
+    res.status(200).send({auth: true, user: user, token: token})
 }
