@@ -12,13 +12,12 @@ router.get('/', function(req, res) {
 
 router.route('/register')
     .post(authController.register)
-    
 router.route('/login')
     .post(authController.login)
 
 router.route('/user')
     .get(userController.getUser)
-    //.post(userController.)
+    .post(userController.addUser)
     .put(userController.updateUser)
     .delete(userController.deleteUser)
 
