@@ -7,18 +7,17 @@ const bodyParser = require('body-parser')
 const port = process.env.PORT || 4040 // to modify later with process.env
 const app = express()
 const router = require('./routes/routes')
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
-app.listen(port, function() {
+server.listen(port, function() {
     console.log("Running on port " + port)
 })
-
-const http = require('http')
-const server = http.createServer(app)
-const { Server } = require("socket.io")
-const io = new Server(server)
 
 io.on('connection', (socket) => {
     console.log('a user connected')
