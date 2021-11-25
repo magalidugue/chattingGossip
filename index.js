@@ -1,8 +1,10 @@
 // require('dotenv').config()
 require('./db')
+require('dotenv').config()
+
 const express = require('express')
 const bodyParser = require('body-parser')
-const port = 4040 // to modify later with process.env
+const port = process.env.PORT || 4040 // to modify later with process.env
 const app = express()
 const router = require('./routes/routes')
 
