@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const authController = require('../controllers/authController')
+const security = require('../middlewares/security')
 
 router.get('/', function(req, res) {
     res.json({
