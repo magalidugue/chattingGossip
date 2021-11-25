@@ -1,4 +1,4 @@
-// require('dotenv').config()
+require('dotenv').config()
 require('./db')
 require('dotenv').config()
 
@@ -24,6 +24,10 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log('user disconnected');
     });
+    socket.on('chat', msg => {
+        console.log('message: ' + msg);
+        });       
 });
+
 
 app.use('/', router)

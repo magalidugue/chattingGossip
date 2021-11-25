@@ -4,6 +4,7 @@ const security = require('../middlewares/security')
 const userController = require('../controllers/userController')
 const { get } = require('mongoose')
 const path = require("path");
+const chatController = require ('../controllers/chatController.js')
 
 router.get('/', function(req, res) {
     res.json({
@@ -37,5 +38,7 @@ router.route('/chat')
     .get(function(req, res) {
         res.sendFile('mainChatPage.html', { root: path.join(__dirname, '../views') })
     })
+
+
 
 module.exports = router
