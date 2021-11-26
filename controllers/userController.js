@@ -8,7 +8,7 @@ module.exports.fetchUser = async function(id) {
 }
 
 module.exports.getUser = async function(req, res) {
-    const user = this.fetchUser(req.params.id)
+    const user = fetchUserFunctionStyle(req.params.id)
     if (!checkIfUserExist(user, res)) {
         return
     }
@@ -22,7 +22,6 @@ module.exports.addUser = async function(req, res) {
         if(err) {
             console.log(err);
             res.sendStatus(500)
-            return
         }
     });
 }
@@ -66,7 +65,7 @@ function checkIfUserExist(user, res) {
 
 module.exports.getUserWithToken = async function(token) {
     const decoded = jwt.verify(token, SECRET_KEY)
-    return await this.fetchUser(decoded['id'])
+    return await fetchUserFunctionStyle(decoded['id'])
 }
 
 async function decodeJWTToken(token) {
