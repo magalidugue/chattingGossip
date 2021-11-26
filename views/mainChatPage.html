@@ -44,24 +44,25 @@
         </form>
       </div>
     </div>
-   
+
 
     <script src="socket.io/socket.io.js"></script>
 
     <script>
+
       var socket = io();
-    
+
       const chat = document.querySelector('.chat-form')
       const Input = document.querySelector('.chat-input')
 
       chat.addEventListener('submit', event => {
          event.preventDefault()
-         socket.emit('chat', Input.value)
+         socket.emit('chat', {message: Input.value, token: getCookie('token')})
           Input.value = ''
-    })
-    socket.on('chat', message => {
-      console.log('From server: ', message)
-    })
+      })
+      socket.on('chat', message => {
+        console.log('From server: ', message)
+      })
       const chatWindow = document.querySelector('.chat-window')
 
       const renderMessage = message => {
@@ -69,13 +70,20 @@
       div.classList.add('render-message')
       div.innerText = message
       chatWindow.appendChild(div)
-    }
+      if (chatWindow.childElementCount === 14) {
+        chatWindow.removeChild(chatWindow.getElementsByTagName('div')[0])
+      }}
 
-    socket.on('chat', message => {
-      // make sure to modify this
-      renderMessage(message)
-    })
+      socket.on('chat', message => {
+        // make sure to modify this
+        renderMessage(message)
+      })
 
+      function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+      }
     </script>
  
   </body>

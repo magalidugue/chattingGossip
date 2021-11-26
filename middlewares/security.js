@@ -16,8 +16,8 @@ exports.checkAdmin = async (req, res, next) => {
 }
 
 exports.isAuthentificated = async (req, res, next) => {
-    console.log('hello le token')
-    let token = req.headers['x-access-token'] || req.headers['authorization'];
+    let token = req.cookies['token']
+    console.log(token)
     if (!!token && token.startsWith('Bearer ')) {
         token = token.slice(7, token.length);
     }
@@ -26,9 +26,8 @@ exports.isAuthentificated = async (req, res, next) => {
         jwt.verify(token, SECRET_KEY, (err, decoded) => {
             if (err) {
                 return res.status(401).json('token_not_valid');
-            } 
+            }
             next()
-        
         });
     } else {
         return res.status(401).json('token_required');

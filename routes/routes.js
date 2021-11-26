@@ -35,7 +35,7 @@ router.route('/user')
     .delete(userController.deleteUser)
 
 router.route('/chat')
-    .get(function(req, res) {
+    .get(security.isAuthentificated, function(req, res) {
         res.sendFile('mainChatPage.html', { root: path.join(__dirname, '../views') })
     })
 

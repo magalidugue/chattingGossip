@@ -1,9 +1,12 @@
 const bcrypt = require('bcryptjs')
 const User = require("../models/user");
 
+module.exports.fetchUser = async function(id) {
+    return await User.findOne({_id: id}).exec();
+}
+
 module.exports.getUser = async function(req, res) {
-    const queryParam = {_id: req.params.id}
-    const user = await User.findOne(queryParam).exec();
+    const user = this.fetchUser(req.params.id)
     if (!checkIfUserExist(user, res)) {
         return
     }

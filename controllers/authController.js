@@ -6,7 +6,7 @@ const SECRET_KEY = process.env.TOKEN_JWT
 
 const createToken = (id) => {
     return jwt.sign({id}, SECRET_KEY, {
-        expiresIn: 3600
+        expiresIn: '1h'
     })
 }
 
@@ -30,7 +30,7 @@ module.exports.login = async function(req, res) {
         return
     }
     res.cookie('token', token, {
-        maxAge: 3600
+        maxAge: 3600000
     })
     res.redirect('/chat')
 }

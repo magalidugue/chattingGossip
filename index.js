@@ -11,7 +11,10 @@ const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
+const cookieParser = require("cookie-parser");
+const chatController = require('./controllers/chatController')
 
+app.use(cookieParser());
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
@@ -20,17 +23,7 @@ server.listen(port, function() {
 })
 
 io.on('connection', (socket) => {
-    console.log('a user connected')
-    socket.on('disconnect', () => {
-        console.log('user disconnected');
-    });
-    socket.on('chat', msg => {
-        console.log('message: ' + msg);
-        });
-        socket.on('chat', message => {
-            console.log('From client: ', message)
-            io.emit('chat', message)
-          })       
+    chatController.socketResponder(socket, io)
 });
 
 
