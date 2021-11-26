@@ -14,6 +14,8 @@ const io = new Server(server);
 const cookieParser = require("cookie-parser");
 const chatController = require('./controllers/chatController')
 
+app.use(express.static('public'))
+
 app.use(cookieParser());
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
