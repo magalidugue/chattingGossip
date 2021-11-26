@@ -66,22 +66,20 @@ function checkIfUserExist(user, res) {
 
 module.exports.getUserWithToken = async function(token) {
     const decoded = jwt.verify(token, SECRET_KEY)
-    const user = await this.fetchUser(decoded['id'])
-    return user
+    return await this.fetchUser(decoded['id'])
 }
 
-async function faisChier(token) {
+async function decodeJWTToken(token) {
     const decoded = jwt.verify(token, SECRET_KEY)
-    const user = await faisChierSaMere(decoded['id'])
-    return user
+    return await fetchUserFunctionStyle(decoded['id'])
 }
 
-async function faisChierSaMere(id) {
+async function fetchUserFunctionStyle(id) {
     return await User.findOne({_id: id}).exec();
 }
 
 module.exports.changeNickname = async function(req, res) {
-    const user = await faisChier(req.body.token);
+    const user = await decodeJWTToken(req.body.token);
     update(user.id, req.body.toChange)
 }
 
