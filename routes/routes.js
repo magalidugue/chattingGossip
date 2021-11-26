@@ -7,11 +7,7 @@ const path = require("path");
 const chatController = require ('../controllers/chatController.js')
 
 router.get('/', function(req, res) {
-    res.json({
-        status: 'API works',
-        message: 'Welcome to my API'
-        
-    })
+    res.redirect('/login')
 })
 
 router.get('/signup', function(req, res) {
@@ -29,10 +25,11 @@ router.route('/login')
     })
 
 router.route('/user')
-    .get(security.checkAdmin, userController.getUser)
     .post(security.checkAdmin, userController.addUser)
     .put(security.checkAdmin, userController.updateUser)
     .delete(security.checkAdmin, userController.deleteUser)
+router.route('/user/:id')
+    .get(security.checkAdmin, userController.getUser)
 
 router.route('/chat')
     .get(security.isAuthentificated, function(req, res) {

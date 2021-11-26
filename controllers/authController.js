@@ -20,7 +20,6 @@ module.exports.register = async function(req, res) {
 module.exports.login = async function(req, res) {
     const queryParam = {email : req.body.email}
     const user = await User.findOne(queryParam).exec();
-    const token = createToken(user._id)
     if(!user) {
         res.status(404).send('unknown user')
         res.end()
@@ -30,6 +29,7 @@ module.exports.login = async function(req, res) {
         res.end()
         return
     }
+    const token = createToken(user._id)
     res.cookie('token', token, {
         maxAge: 3600000
     })
