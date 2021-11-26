@@ -37,8 +37,7 @@
         </div>
         <form class="chat-form">
           <label class="chat-label">
-            Enter a message:
-            <input type="text" class="chat-input" />
+            <input id="chat-message" type="text" class="chat-input" placeholder="Enter a message" />
           </label>
           <input type="submit" class="chat-submit" value="enter" />
         </form>
@@ -46,10 +45,18 @@
         <button onclick="changeRoom('room2')">Anis glande</button>
         <button onclick="changeRoom('room3')">Théo harcèle sexuellement ses camarades</button>
       </div>
+      <form class="chat-form">
+        <label class="chat-label">
+          <input id="message-input" type="text" class="chat-input" placeholder="Change your nickname"/>
+        </label>
+        <input onclick="changeNickname()" class="chat-submit" value="enter" />
+      </form>
     </div>
 
 
     <script src="socket.io/socket.io.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
 
     <script>
 
@@ -57,7 +64,9 @@
       socket.emit('create', "room1");
 
       const chat = document.querySelector('.chat-form')
-      const Input = document.querySelector('.chat-input')
+      const Input = document.getElementById('chat-message')
+      const nickInput = document.getElementById('message-input')
+
       let currRoom = 'room1'
       const roomsName = {
         'room1': "Clément est bourré",
@@ -110,6 +119,17 @@
         chatWindow.innerHTML = roomsContainer[currRoom]
         socket.emit('leave', room)
         socket.emit('create', room);
+      }
+
+      function changeNickname() {
+        const nickname = nickInput.value;
+        nickInput.value = ""
+        $.ajax({
+          url: '/changeNickname',
+          type: "PUT", 
+          contentType: 'application/json',
+          data : JSON.stringify({token : getCookie('token'), toChange: {pseudo: nickname}}),
+        })
       }
     </script>
  

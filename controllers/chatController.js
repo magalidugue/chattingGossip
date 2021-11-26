@@ -1,9 +1,4 @@
-const User = require('../models/user')
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
-const SECRET_KEY = process.env.TOKEN_JWT
 const userController = require('./userController')
-const {fetchUser} = require("./userController");
 
 module.exports.socketResponder = function(socket, io) {
     socket.on('create', function(room) {
@@ -20,16 +15,11 @@ module.exports.socketResponder = function(socket, io) {
 
     socket.on('chat', message => {
         console.log('From client: ', message)
-        getUserWithToken(message['token']).then(value =>
+        userController.getUserWithToken(message['token']).then(value =>
             {
                 io.to(message['room']).emit('chat', value.pseudo + ': ' + message['message'])
             }
         )
     })
-}
-
-async function getUserWithToken(token) {
-    let decoded = jwt.verify(token, SECRET_KEY)
-    return await fetchUser(decoded['id'])
 }
 

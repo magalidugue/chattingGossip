@@ -1,5 +1,7 @@
 const bcrypt = require('bcryptjs')
-const User = require("../models/user");
+const User = require("../models/user")
+const jwt = require('jsonwebtoken')
+const SECRET_KEY = process.env.TOKEN_JWT
 
 module.exports.fetchUser = async function(id) {
     return await User.findOne({_id: id}).exec();
@@ -30,12 +32,16 @@ module.exports.updateUser = async function(req, res) {
     if (queryParam.password) {
         queryParam.password = bcrypt.hashSync(queryParam.password, 8)
     }
-    await User.updateOne({_id: req.body.id}, req.body);
+    update(req.body.id, req.body)
     const user = await User.findOne(queryParam)
     if (!checkIfUserExist(user, res)) {
         return
     }
     res.status(200).send({updated: true, user: user})
+}
+
+async function update(id, params) {
+    return await User.updateOne({_id: id}, params);
 }
 
 module.exports.deleteUser = async function(req, res) {
@@ -57,3 +63,25 @@ function checkIfUserExist(user, res) {
     }
     return true
 }
+
+module.exports.getUserWithToken = async function(token) {
+    const decoded = jwt.verify(token, SECRET_KEY)
+    const user = await this.fetchUser(decoded['id'])
+    return user
+}
+
+async function faisChier(token) {
+    const decoded = jwt.verify(token, SECRET_KEY)
+    const user = await faisChierSaMere(decoded['id'])
+    return user
+}
+
+async function faisChierSaMere(id) {
+    return await User.findOne({_id: id}).exec();
+}
+
+module.exports.changeNickname = async function(req, res) {
+    const user = await faisChier(req.body.token);
+    update(user.id, req.body.toChange)
+}
+

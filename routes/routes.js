@@ -29,15 +29,18 @@ router.route('/login')
     })
 
 router.route('/user')
-    .get(userController.getUser)
-    .post(userController.addUser)
-    .put(userController.updateUser)
-    .delete(userController.deleteUser)
+    .get(security.checkAdmin, userController.getUser)
+    .post(security.checkAdmin, userController.addUser)
+    .put(security.checkAdmin, userController.updateUser)
+    .delete(security.checkAdmin, userController.deleteUser)
 
 router.route('/chat')
     .get(security.isAuthentificated, function(req, res) {
         res.sendFile('mainChatPage.html', { root: path.join(__dirname, '../views') })
     })
+
+router.route('/changeNickname')
+    .put(security.isAuthentificated, userController.changeNickname)
 
 
 
