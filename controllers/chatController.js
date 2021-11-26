@@ -6,19 +6,23 @@ const userController = require('./userController')
 const {fetchUser} = require("./userController");
 
 module.exports.socketResponder = function(socket, io) {
-    console.log('a user connected')
+    socket.on('create', function(room) {
+        socket.join(room);
+    });
+
+    socket.on('leave', function(room) {
+        socket.leave(room);
+    });
 
     socket.on('disconnect', () => {
         console.log('user disconnected');
     });
-    socket.on('chat', msg => {
-        console.log('message: ' + msg);
-    });
+
     socket.on('chat', message => {
         console.log('From client: ', message)
         getUserWithToken(message['token']).then(value =>
             {
-                io.emit('chat', value.pseudo + ': ' + message['message'])
+                io.to(message['room']).emit('chat', value.pseudo + ': ' + message['message'])
             }
         )
     })

@@ -30,7 +30,7 @@
   </style>
   <body>
     <div id="container">
-    
+    <h1 id="room">Clément est bourré</h1>
       <div id="chatSection">
         <div class="chat-window">
 
@@ -42,6 +42,9 @@
           </label>
           <input type="submit" class="chat-submit" value="enter" />
         </form>
+        <button onclick="changeRoom('room1')">Clément est bourré</button>
+        <button onclick="changeRoom('room2')">Anis glande</button>
+        <button onclick="changeRoom('room3')">Théo harcèle sexuellement ses camarades</button>
       </div>
     </div>
 
@@ -51,15 +54,29 @@
     <script>
 
       var socket = io();
+      socket.emit('create', "room1");
 
       const chat = document.querySelector('.chat-form')
       const Input = document.querySelector('.chat-input')
+      let currRoom = 'room1'
+      const roomsName = {
+        'room1': "Clément est bourré",
+        'room2': "Anis glande",
+        'room3': "Théo harcèle sexuellement ses camarades"
+      }
+
+      const roomsContainer = {
+        'room1': "",
+        'room2': "",
+        'room3': ""
+      }
 
       chat.addEventListener('submit', event => {
          event.preventDefault()
-         socket.emit('chat', {message: Input.value, token: getCookie('token')})
+         socket.emit('chat', {message: Input.value, token: getCookie('token'), room: currRoom})
           Input.value = ''
       })
+
       socket.on('chat', message => {
         console.log('From server: ', message)
       })
@@ -83,6 +100,16 @@
         const value = `; ${document.cookie}`;
         const parts = value.split(`; ${name}=`);
         if (parts.length === 2) return parts.pop().split(';').shift();
+      }
+
+      function changeRoom(room) {
+        const title = document.getElementById('room')
+        title.innerText = roomsName[room]
+        roomsContainer[currRoom] = chatWindow.innerHTML
+        currRoom = room
+        chatWindow.innerHTML = roomsContainer[currRoom]
+        socket.emit('leave', room)
+        socket.emit('create', room);
       }
     </script>
  
